@@ -15,7 +15,31 @@ TrGWGLM2<- TrGWGLM  %>%
       labels = c("Commercial", "Residential", "Agricultural", "Park"))) %>% 
       rename(Long = lng, 
       Lat = lat) 
+      
+         
+pal <- colorFactor(
+  palette = c("#ff7f00", "#e31a1c", "#33a02c", "#1f78b4"),
+  domain = TrGWGLM$ZoningType)
+  
+  zoningmap<-leaflet(TrGWGLM2) %>% 
+  addProviderTiles(providers$Stamen.Toner) %>%
+  addCircleMarkers(radius = 7,
+                           stroke = FALSE,
+                           weight = 10,
+                           fillColor = ~pal(ZoningType),
+                           opacity = 0.9,
+                   label = ~paste("Zoning: ", ZoningType)) %>%
+  addLegend(
+    "bottomright",
+    pal = pal,
+    values = ~ZoningType,
+    title = "Zoning",
+    opacity = 1)
+ 
+saveWidget(zoningmap, file = "zoningmap.html")
     
+
+## Non-stationary effects interactive maps
 
 pal <- colorNumeric(
   palette = "plasma",
